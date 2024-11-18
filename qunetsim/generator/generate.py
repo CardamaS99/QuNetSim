@@ -32,7 +32,7 @@ def get_connections(hosts: dict[str, Host], string: str) -> list[Connection]:
 
         # Append new connection
         connections.append(Connection(host1, host2, connection_type))
-        
+
         # Update the start index
         start += match.start(3)
 
@@ -40,6 +40,7 @@ def get_connections(hosts: dict[str, Host], string: str) -> list[Connection]:
     connections = list(dict.fromkeys(connections))
 
     return connections
+
 
 def get_hosts(string: str) -> dict[str, Host]:
     """
@@ -64,6 +65,7 @@ def get_hosts(string: str) -> dict[str, Host]:
 
     return hosts
 
+
 def array_to_host(array):
     """
     Convert the array of host string to a host object.
@@ -74,11 +76,12 @@ def array_to_host(array):
     Returns:
         list (Host): The list with the host objects.
     """
-    
+
     # Create one host object for each host in the array
-    hosts = {host : Host(host) for host in array}
-    
+    hosts = {host: Host(host) for host in array}
+
     return hosts
+
 
 def network_parser(string) -> tuple[dict[str, Host], list[Connection]]:
     """
@@ -104,6 +107,7 @@ def network_parser(string) -> tuple[dict[str, Host], list[Connection]]:
 
     return hosts, connections
 
+
 def network_generate(string):
     """
     Generate the network from the string.
@@ -119,7 +123,7 @@ def network_generate(string):
 
     for connection in connections:
         connection.add_connection()
-    
+
     # Append the hosts to the network
     for host in hosts.values():
         network.add_host(host)

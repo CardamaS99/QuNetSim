@@ -1,5 +1,6 @@
 from qunetsim.components import Host
 
+
 class ConnType:
     """
     Enumeration for the connection types.
