@@ -16,7 +16,7 @@ def get_connections(hosts: dict[str, Host], string: str) -> list[Connection]:
         list[Connection]: The list of connections.
     """
     # Use the regular expression to get the connections
-    regex = r'(\w+)(<{0,1}(==|--|~~)>{0,1})(\w+)'
+    regex = r'(\{(?:\w+,)*\w+\}|\w+)(<{0,1}(?:==|--|~~)>{0,1})(\{(?:\w+,)*\w+\}|\w+)'
 
     connections = []
     start = 0
@@ -26,12 +26,24 @@ def get_connections(hosts: dict[str, Host], string: str) -> list[Connection]:
         if not match:
             break
 
-        host1 = hosts[match.group(1)]
+        # Get the hosts from the left and right side
+        hosts_left = get_hosts(match.group(1))
+        hosts_right = get_hosts(match.group(3))
         connection_type = match.group(2)
-        host2 = hosts[match.group(4)]
 
-        # Append new connection
-        connections.append(Connection(host1, host2, connection_type))
+        print(f"Match 1: {match.group(1)}, Match 2: {match.group(2)}, Match 3: {match.group(3)}")
+
+        print(f"Hosts left: {hosts_left}")
+        print(f"Hosts right: {hosts_right}")
+
+        # Append the new connections
+        for host_left in hosts_left:
+            for host_right in hosts_right:
+                host1 = hosts[host_left]
+                host2 = hosts[host_right]
+                connections.append(Connection(host1, host2, connection_type))
+
+                print(f"Connection between {host1} and {host2} of type {connection_type}")
 
         # Update the start index
         start += match.start(3)
@@ -42,7 +54,7 @@ def get_connections(hosts: dict[str, Host], string: str) -> list[Connection]:
     return connections
 
 
-def get_hosts(string: str) -> dict[str, Host]:
+def get_hosts(string: str) -> list[str]:
     """
     Get the hosts from the string.
 
@@ -50,7 +62,7 @@ def get_hosts(string: str) -> dict[str, Host]:
         string (str): The string representing the hosts.
 
     Returns:
-        dict[str, Host]: The dictionary of hosts.
+        list[str]: The list of hosts.
     """
     # Use the regular expression (\w+)
     regex = r'(\w+)'
@@ -108,7 +120,7 @@ def network_parser(string) -> tuple[dict[str, Host], list[Connection]]:
     return hosts, connections
 
 
-def network_generate(string):
+def network_generate(string : str) -> tuple[Network, dict[str, Host]]:
     """
     Generate the network from the string.
 
