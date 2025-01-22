@@ -31,19 +31,12 @@ def get_connections(hosts: dict[str, Host], string: str) -> list[Connection]:
         hosts_right = get_hosts(match.group(3))
         connection_type = match.group(2)
 
-        print(f"Match 1: {match.group(1)}, Match 2: {match.group(2)}, Match 3: {match.group(3)}")
-
-        print(f"Hosts left: {hosts_left}")
-        print(f"Hosts right: {hosts_right}")
-
         # Append the new connections
         for host_left in hosts_left:
             for host_right in hosts_right:
                 host1 = hosts[host_left]
                 host2 = hosts[host_right]
                 connections.append(Connection(host1, host2, connection_type))
-
-                print(f"Connection between {host1} and {host2} of type {connection_type}")
 
         # Update the start index
         start += match.start(3)
